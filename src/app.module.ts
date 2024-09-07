@@ -8,10 +8,11 @@ import { PodcastsModule } from './podcasts/podcasts.module';
 import { PlaylistsModule } from './playlists/playlists.module';
 import { ArtistsController } from './artists/artists.controller';
 import { ArtistsModule } from './artists/artists.module';
+import { PrismaService } from './prisma/prisma.service';
 
 @Module({
   imports: [AuthModule, TracksModule, AlbumsModule, PodcastsModule, PlaylistsModule, ArtistsModule],
   controllers: [AppController, ArtistsController],
-  providers: [AppService],
+  providers: [AppService, PrismaService],
 })
 export class AppModule {}
