@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email    String   @unique
+  password String
+  name     String?
+  profile  Profile?
+}
+
+model Profile {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bio         String
+  image       String
+  dateofbirth DateTime
+  gender      Gender
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String   @unique @db.Uuid
+}
+
+enum Gender {
+  Male
+  Female
+  NonBinary
+  Other
+  NotSpecified
+}
+
+model Artists {
+  id     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name   String
+  image  String
+  albums Albums[]
+}
+
+model Albums {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  artist    Artists  @relation(fields: [artistsId], references: [id])
+  artistsId String   @db.Uuid
+  tracks    Tracks[]
+}
+
+model Tracks {
+  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  album    Albums  @relation(fields: [albumId], references: [id])
+  title    String
+  duration Decimal
+  albumId  String  @db.Uuid
+}
+
+model Podcasts {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  description String
+  host        String
+}
+
+model PodcastEpisode {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  description String
+  releaseDate DateTime
+  host        String   @unique
+}
