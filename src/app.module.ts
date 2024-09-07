@@ -9,10 +9,12 @@ import { PlaylistsModule } from './playlists/playlists.module';
 import { ArtistsController } from './artists/artists.controller';
 import { ArtistsModule } from './artists/artists.module';
 import { PrismaService } from './prisma/prisma.service';
+import { UsersModule } from './users/users.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
-  imports: [AuthModule, TracksModule, AlbumsModule, PodcastsModule, PlaylistsModule, ArtistsModule],
+  imports: [SharedModule, AuthModule, TracksModule, AlbumsModule, PodcastsModule, PlaylistsModule, ArtistsModule, UsersModule],
   controllers: [AppController, ArtistsController],
   providers: [AppService, PrismaService],
 })
-export class AppModule {}
+export class AppModule { }
