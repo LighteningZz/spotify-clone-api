@@ -22,7 +22,7 @@ generator nestjsDto {
   entityPrefix                    = ""
   entitySuffix                    = ""
   classValidation                 = "true"
-  fileNamingStyle                 = "camel"
+  fileNamingStyle                 = "snake"
   noDependencies                  = "false"
   outputType                      = "class"
   definiteAssignmentAssertion     = "false"
