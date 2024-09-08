@@ -3,13 +3,13 @@ import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Injectable()
-export class ProfileService {
+export class ProfilesService {
   create(createProfileDto: CreateProfileDto) {
     return 'This action adds a new profile';
   }
 
   findAll() {
-    return `This action returns all profile`;
+    return `This action returns all profiles`;
   }
 
   findOne(id: number) {
