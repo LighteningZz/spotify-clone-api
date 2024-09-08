@@ -1,11 +1,25 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+
+import {ApiProperty} from '@nestjs/swagger'
+import {IsOptional,IsString} from 'class-validator'
+
+
+
 
 export class ConnectArtistsDto {
   @ApiProperty({
-    type: 'string',
-  })
-  @IsNotEmpty()
-  @IsString()
-  id: string;
+  type: 'string',
+  required: false,
+  nullable: true,
+})
+@IsOptional()
+@IsString()
+id?: string ;
+@ApiProperty({
+  type: 'string',
+  required: false,
+  nullable: true,
+})
+@IsOptional()
+@IsString()
+name?: string ;
 }
