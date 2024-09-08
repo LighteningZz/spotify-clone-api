@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTrackDto } from './dto/create-track.dto';
-import { UpdateTrackDto } from './dto/update-track.dto';
+import { CreateTracksDto } from './dto/create-tracks.dto';
+import { UpdateTracksDto } from './dto/update-tracks.dto';
 
 @Injectable()
 export class TracksService {
-  create(createTrackDto: CreateTrackDto) {
+  create(createTracksDto: CreateTracksDto) {
     return 'This action adds a new track';
   }
 
@@ -16,7 +16,7 @@ export class TracksService {
     return `This action returns a #${id} track`;
   }
 
-  update(id: number, updateTrackDto: UpdateTrackDto) {
+  update(id: number, updateTracksDto: UpdateTracksDto) {
     return `This action updates a #${id} track`;
   }
 

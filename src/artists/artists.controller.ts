@@ -1,15 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ArtistsService } from './artists.service';
-import { CreateArtistDto } from './dto/create-artist.dto';
-import { UpdateArtistDto } from './dto/update-artist.dto';
-
+import { CreateArtistsDto } from './dto/create-artists.dto';
+import { UpdateArtistsDto } from './dto/update-artists.dto';
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('Artists')
 @Controller('artists')
 export class ArtistsController {
-  constructor(private readonly artistsService: ArtistsService) {}
+  constructor(private readonly artistsService: ArtistsService) { }
 
   @Post()
-  create(@Body() createArtistDto: CreateArtistDto) {
-    return this.artistsService.create(createArtistDto);
+  create(@Body() createArtistsDto: CreateArtistsDto) {
+    return this.artistsService.create(createArtistsDto);
   }
 
   @Get()
@@ -23,12 +32,14 @@ export class ArtistsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateArtistDto: UpdateArtistDto) {
-    return this.artistsService.update(+id, updateArtistDto);
+  update(@Param('id') id: string, @Body() updateArtistsDto: UpdateArtistsDto) {
+    return this.artistsService.update(+id, updateArtistsDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.artistsService.remove(+id);
+    return this.artistsService.remove({
+      id: id
+    });
   }
 }

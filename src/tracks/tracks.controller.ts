@@ -1,15 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { TracksService } from './tracks.service';
-import { CreateTrackDto } from './dto/create-track.dto';
-import { UpdateTrackDto } from './dto/update-track.dto';
+import { CreateTracksDto } from './dto/create-tracks.dto';
+import { UpdateTracksDto } from './dto/update-tracks.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Tracks')
 @Controller('tracks')
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
 
   @Post()
-  create(@Body() createTrackDto: CreateTrackDto) {
-    return this.tracksService.create(createTrackDto);
+  create(@Body() createTracksDto: CreateTracksDto) {
+    return this.tracksService.create(createTracksDto);
   }
 
   @Get()
@@ -23,8 +33,8 @@ export class TracksController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
-    return this.tracksService.update(+id, updateTrackDto);
+  update(@Param('id') id: string, @Body() updateTracksDto: UpdateTracksDto) {
+    return this.tracksService.update(+id, updateTracksDto);
   }
 
   @Delete(':id')

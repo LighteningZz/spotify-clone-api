@@ -1,15 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
-import { CreateProfileDto } from './dto/create-profile.dto';
-import { UpdateProfileDto } from './dto/update-profile.dto';
+import { CreateProfilesDto } from './dto/create-profiles.dto';
+import { UpdateProfilesDto } from './dto/update-profiles.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Profiles')
 @Controller('profiles')
 export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
   @Post()
-  create(@Body() createProfileDto: CreateProfileDto) {
-    return this.profilesService.create(createProfileDto);
+  create(@Body() createProfilesDto: CreateProfilesDto) {
+    return this.profilesService.create(createProfilesDto);
   }
 
   @Get()
@@ -23,8 +33,11 @@ export class ProfilesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProfileDto: UpdateProfileDto) {
-    return this.profilesService.update(+id, updateProfileDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateProfilesDto: UpdateProfilesDto,
+  ) {
+    return this.profilesService.update(+id, updateProfilesDto);
   }
 
   @Delete(':id')

@@ -10,10 +10,17 @@ import { ArtistsModule } from './artists/artists.module';
 import { AlbumsModule } from './albums/albums.module';
 import { TracksModule } from './tracks/tracks.module';
 
-
 @Module({
-  imports: [SharedModule, AuthModule, UsersModule, ProfilesModule, ArtistsModule, AlbumsModule, TracksModule],
+  imports: [
+    SharedModule,
+    AuthModule,
+    UsersModule,
+    ProfilesModule,
+    ArtistsModule,
+    AlbumsModule,
+    TracksModule,
+  ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })
-export class AppModule { }
+export class AppModule {}

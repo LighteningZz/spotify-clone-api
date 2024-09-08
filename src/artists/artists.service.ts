@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreateArtistDto } from './dto/create-artist.dto';
-import { UpdateArtistDto } from './dto/update-artist.dto';
+import { CreateArtistsDto } from './dto/create-artists.dto';
+import { UpdateArtistsDto } from './dto/update-artists.dto';
+import { Artists, Prisma } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ArtistsService {
-  create(createArtistDto: CreateArtistDto) {
+  constructor(private prisma: PrismaService) { }
+  create(createArtistsDto: CreateArtistsDto) {
     return 'This action adds a new artist';
   }
 
@@ -16,11 +19,13 @@ export class ArtistsService {
     return `This action returns a #${id} artist`;
   }
 
-  update(id: number, updateArtistDto: UpdateArtistDto) {
+  update(id: number, updateArtistsDto: UpdateArtistsDto) {
     return `This action updates a #${id} artist`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} artist`;
+  remove(where: Prisma.ArtistsWhereUniqueInput): Promise<Artists> {
+    return this.prisma.artists.delete({
+      where,
+    });
   }
 }
