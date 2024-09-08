@@ -11,7 +11,7 @@
 
 This project need to initial music data from tools
 a tool scraping music data from [ncs.io](https://ncs.io/)
-and download and generate additional music track metadata such as title, artist, album, song cover if they missing.
+and download and generate additional music track metadata such as track duration if they missing.
 data size around 4GB 500+ song
 
 ## Initial data command
@@ -21,7 +21,7 @@ cd tools
 pnpm install
 # fetch data and generated from ncs.io
 pnpm run fetch
-# if you skip download media but missing some property eg. album
+# if you skip download media but missing some property eg. duration
 pnpm run fetch:skip
 ```
 
