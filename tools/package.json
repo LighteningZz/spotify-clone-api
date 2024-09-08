@@ -1,0 +1,17 @@
+{
+  "name": "tools",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "fetch": "node fetch.mjs",
+    "fetch:skip": "node fetch.mjs --skip"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.645.0",
+    "axios": "^1.7.7",
+    "mime": "^4.0.4",
+    "music-metadata": "^10.4.0",
+    "node-html-parser": "^6.1.13",
+    "node-id3": "^0.2.6"
+  }
+}
