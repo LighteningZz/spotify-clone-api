@@ -64,24 +64,32 @@ enum Gender {
 
 model Artists {
   id     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name   String
+  name   String   @unique
   image  String
   albums Albums[]
+  tracks Tracks[]
 }
 
 model Albums {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   artist    Artists  @relation(fields: [artistsId], references: [id])
   artistsId String   @db.Uuid
+  image     String
+  name      String
   tracks    Tracks[]
 }
 
 model Tracks {
-  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  album    Albums  @relation(fields: [albumId], references: [id])
-  title    String
-  duration Decimal
-  albumId  String  @db.Uuid
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  album        Albums   @relation(fields: [albumId], references: [id])
+  title        String
+  image        String
+  duration     Decimal?
+  durationText String?
+  url          String?
+  albumId      String   @db.Uuid
+  artist       Artists  @relation(fields: [artistsId], references: [id])
+  artistsId    String   @db.Uuid
 }
 
 // model Podcasts {
