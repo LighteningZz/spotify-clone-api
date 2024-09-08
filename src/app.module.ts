@@ -11,9 +11,10 @@ import { ArtistsModule } from './artists/artists.module';
 import { PrismaService } from './prisma/prisma.service';
 import { UsersModule } from './users/users.module';
 import { SharedModule } from './shared/shared.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
-  imports: [SharedModule, AuthModule, TracksModule, AlbumsModule, PodcastsModule, PlaylistsModule, ArtistsModule, UsersModule],
+  imports: [SharedModule, AuthModule, TracksModule, AlbumsModule, PodcastsModule, PlaylistsModule, ArtistsModule, UsersModule, ProfileModule],
   controllers: [AppController, ArtistsController],
   providers: [AppService, PrismaService],
 })

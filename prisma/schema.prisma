@@ -8,6 +8,29 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator nestjsDto {
+  provider                        = "prisma-generator-nestjs-dto"
+  output                          = "../src/generated/nestjs-dto"
+  outputToNestJsResourceStructure = "true"
+  flatResourceStructure           = "false"
+  exportRelationModifierClasses   = "true"
+  reExport                        = "false"
+  generateFileTypes               = "all"
+  createDtoPrefix                 = "Create"
+  updateDtoPrefix                 = "Update"
+  dtoSuffix                       = "Dto"
+  entityPrefix                    = ""
+  entitySuffix                    = ""
+  classValidation                 = "false"
+  fileNamingStyle                 = "camel"
+  noDependencies                  = "false"
+  outputType                      = "class"
+  definiteAssignmentAssertion     = "false"
+  requiredResponseApiProperty     = "true"
+  prettier                        = "false"
+  outputApiPropertyType           = "true"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -61,17 +84,17 @@ model Tracks {
   albumId  String  @db.Uuid
 }
 
-model Podcasts {
-  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title       String
-  description String
-  host        String
-}
+// model Podcasts {
+//   id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+//   title       String
+//   description String
+//   host        String
+// }
 
-model PodcastEpisode {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title       String
-  description String
-  releaseDate DateTime
-  host        String   @unique
-}
+// model PodcastEpisode {
+//   id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+//   title       String
+//   description String
+//   releaseDate DateTime
+//   host        String   @unique
+// }
