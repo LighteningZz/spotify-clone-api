@@ -8,28 +8,28 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator nestjsDto {
-  provider                        = "prisma-generator-nestjs-dto"
-  output                          = "../src"
-  outputToNestJsResourceStructure = "true"
-  flatResourceStructure           = "false"
-  exportRelationModifierClasses   = "true"
-  reExport                        = "false"
-  generateFileTypes               = "dto"
-  createDtoPrefix                 = "Create"
-  updateDtoPrefix                 = "Update"
-  dtoSuffix                       = "Dto"
-  entityPrefix                    = ""
-  entitySuffix                    = ""
-  classValidation                 = "true"
-  fileNamingStyle                 = "snake"
-  noDependencies                  = "false"
-  outputType                      = "class"
-  definiteAssignmentAssertion     = "false"
-  requiredResponseApiProperty     = "true"
-  prettier                        = "false"
-  outputApiPropertyType           = "true"
-}
+// generator nestjsDto {
+//   provider                        = "prisma-generator-nestjs-dto"
+//   output                          = "../src"
+//   outputToNestJsResourceStructure = "true"
+//   flatResourceStructure           = "false"
+//   exportRelationModifierClasses   = "true"
+//   reExport                        = "false"
+//   generateFileTypes               = "dto"
+//   createDtoPrefix                 = "Create"
+//   updateDtoPrefix                 = "Update"
+//   dtoSuffix                       = "Dto"
+//   entityPrefix                    = ""
+//   entitySuffix                    = ""
+//   classValidation                 = "true"
+//   fileNamingStyle                 = "camel"
+//   noDependencies                  = "false"
+//   outputType                      = "class"
+//   definiteAssignmentAssertion     = "false"
+//   requiredResponseApiProperty     = "true"
+//   prettier                        = "true"
+//   outputApiPropertyType           = "true"
+// }
 
 datasource db {
   provider = "postgresql"
@@ -37,29 +37,16 @@ datasource db {
 }
 
 model Users {
-  id       String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email    String    @unique
-  password String
-  name     String?
-  profile  Profiles?
-}
-
-model Profiles {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  bio         String
-  image       String
-  dateofbirth DateTime
-  gender      Gender
-  user        Users    @relation(fields: [userId], references: [id])
-  userId      String   @unique @db.Uuid
-}
-
-enum Gender {
-  Male
-  Female
-  NonBinary
-  Other
-  NotSpecified
+  id        String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email     String      @unique
+  name      String?
+  image     String?
+  /// @DtoEntityHidden()
+  password  String
+  /// @DtoEntityHidden()
+  PlayLists PlayLists[]
+  /// @DtoEntityHidden()
+  Favorite  Favorite[]
 }
 
 model Artists {
@@ -80,16 +67,43 @@ model Albums {
 }
 
 model Tracks {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  album        Albums   @relation(fields: [albumId], references: [id])
-  title        String
-  image        String
-  duration     Decimal?
-  durationText String?
-  url          String?
-  albumId      String   @db.Uuid
-  artist       Artists  @relation(fields: [artistsId], references: [id])
-  artistsId    String   @db.Uuid
+  id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  album         Albums          @relation(fields: [albumId], references: [id])
+  title         String
+  image         String
+  duration      Decimal?
+  durationText  String?
+  url           String?
+  albumId       String          @db.Uuid
+  artist        Artists         @relation(fields: [artistsId], references: [id])
+  artistsId     String          @db.Uuid
+  playListItems PlayListItems[]
+  Favorite      Favorite[]
+}
+
+model PlayLists {
+  id      String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title   String
+  items   PlayListItems[]
+  Users   Users?          @relation(fields: [usersId], references: [id])
+  usersId String?         @db.Uuid
+  public  Boolean         @default(true)
+}
+
+model PlayListItems {
+  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  track       Tracks     @relation(fields: [tracksId], references: [id])
+  tracksId    String     @db.Uuid
+  playLists   PlayLists? @relation(fields: [playListsId], references: [id])
+  playListsId String?    @db.Uuid
+}
+
+model Favorite {
+  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  track    Tracks  @relation(fields: [tracksId], references: [id])
+  tracksId String  @db.Uuid
+  Users    Users?  @relation(fields: [usersId], references: [id])
+  usersId  String? @db.Uuid
 }
 
 // model Podcasts {
