@@ -44,6 +44,13 @@ pnpm run push
 pnpm install
 ```
 
+## Env
+
+```bash
+DATABASE_URL="postgresql://{User}:{Password}@localhost:5432/{database_name}?schema=public"
+AUTH_SECRET='this_is_secret'
+```
+
 ## Compile and run the project
 
 ```bash
