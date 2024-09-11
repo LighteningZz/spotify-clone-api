@@ -3,42 +3,44 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
+  UseGuards,
+  Request,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthsDto } from './dto/create-auths.dto';
-import { UpdateAuthsDto } from './dto/update-auths.dto';
-import { ApiTags } from '@nestjs/swagger';
-
+import { LoginAuthsDto } from './dto/login-auths.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
+import { Users } from 'src/users/entities/users.entity';
+import { AccessTokenAuthsDto } from './dto/access-token-auth.dto';
 @ApiTags('Auth')
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
-  @Post()
-  create(@Body() createAuthsDto: CreateAuthsDto) {
-    return this.authService.create(createAuthsDto);
+  @Post('signup')
+  async signUp(@Body() createUserDto: CreateAuthsDto) {
+    return await this.authService.signUp({
+      email: createUserDto.email,
+      password: createUserDto.password,
+      name: createUserDto.name
+    });
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
+  @Post('signin')
+  @ApiResponse({ status: 200, type: AccessTokenAuthsDto })
+  async signIn(@Body() loginUserDto: LoginAuthsDto) {
+    return await this.authService.signIn(loginUserDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthsDto: UpdateAuthsDto) {
-    return this.authService.update(+id, updateAuthsDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+  @UseGuards(AuthGuard('jwt'))
+  @ApiResponse({ status: 200, type: Users })
+  @Get('profile')
+  getProfile(@Request() req) {
+    return plainToInstance(Users, req.user);
   }
 }

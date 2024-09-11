@@ -5,7 +5,6 @@ import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { PrismaService } from './prisma/prisma.service';
 import { UsersModule } from './users/users.module';
-import { ProfilesModule } from './profiles/profiles.module';
 import { ArtistsModule } from './artists/artists.module';
 import { AlbumsModule } from './albums/albums.module';
 import { TracksModule } from './tracks/tracks.module';
@@ -15,7 +14,6 @@ import { TracksModule } from './tracks/tracks.module';
     SharedModule,
     AuthModule,
     UsersModule,
-    ProfilesModule,
     ArtistsModule,
     AlbumsModule,
     TracksModule,
