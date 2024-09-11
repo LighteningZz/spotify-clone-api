@@ -1,31 +1,41 @@
 import { Injectable } from '@nestjs/common';
 import { CreateArtistsDto } from './dto/create-artists.dto';
 import { UpdateArtistsDto } from './dto/update-artists.dto';
-import { Artists, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Artists } from './entities/artists.entity';
 
 @Injectable()
 export class ArtistsService {
   constructor(private prisma: PrismaService) { }
-  create(createArtistsDto: CreateArtistsDto) {
-    return 'This action adds a new artist';
-  }
 
-  findAll() {
-    return `This action returns all artists`;
-  }
+  async findAll(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.ArtistsWhereUniqueInput;
+    where?: Prisma.ArtistsWhereInput;
+    orderBy?: Prisma.ArtistsOrderByWithRelationInput;
+  }): Promise<Artists[]> {
+    const { skip, take, cursor, where, orderBy } = params;
 
-  findOne(id: number) {
-    return `This action returns a #${id} artist`;
-  }
-
-  update(id: number, updateArtistsDto: UpdateArtistsDto) {
-    return `This action updates a #${id} artist`;
-  }
-
-  remove(where: Prisma.ArtistsWhereUniqueInput): Promise<Artists> {
-    return this.prisma.artists.delete({
+    return await this.prisma.artists.findMany({
+      skip,
+      take,
+      cursor,
       where,
+      orderBy,
+      include: {
+        _count: {
+          select: { albums: true },
+        },
+      }
     });
   }
+  async findOne(where: Prisma.ArtistsWhereUniqueInput): Promise<Artists> {
+    return await this.prisma.artists.findUnique({
+      where: where
+    });
+  }
+
+
 }

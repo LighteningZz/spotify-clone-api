@@ -1,26 +1,53 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTracksDto } from './dto/create-tracks.dto';
 import { UpdateTracksDto } from './dto/update-tracks.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { TracksDto } from './dto/tracks.dto';
+import { plainToInstance, classToPlain } from 'class-transformer';
+import { Prisma, Tracks } from '@prisma/client';
+import { TracksWithCount } from './entities/tracks-with-count.entity';
 
 @Injectable()
 export class TracksService {
-  create(createTracksDto: CreateTracksDto) {
-    return 'This action adds a new track';
+  constructor(private prisma: PrismaService) { }
+
+
+
+
+  async findAll(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.TracksWhereUniqueInput;
+    where?: Prisma.TracksWhereInput;
+    orderBy?: Prisma.TracksOrderByWithRelationInput;
+  }): Promise<Tracks[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+
+    return await this.prisma.tracks.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+      include: {
+        _count: {
+          select: { playListItems: true },
+        },
+        Favorite: true
+      }
+    });
   }
 
-  findAll() {
-    return `This action returns all tracks`;
+
+  async findOne(tracksWhereUniqueInput: Prisma.TracksWhereUniqueInput): Promise<Tracks> {
+    return await this.prisma.tracks.findUnique({
+      where: tracksWhereUniqueInput,
+      include: {
+        album: true,
+        artist: true,
+      }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} track`;
-  }
 
-  update(id: number, updateTracksDto: UpdateTracksDto) {
-    return `This action updates a #${id} track`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} track`;
-  }
 }

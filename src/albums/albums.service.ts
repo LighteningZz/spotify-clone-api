@@ -1,26 +1,39 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAlbumsDto } from './dto/create-albums.dto';
 import { UpdateAlbumsDto } from './dto/update-albums.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
+import { Albums } from './entities/albums.entity';
 
 @Injectable()
 export class AlbumsService {
-  create(createAlbumsDto: CreateAlbumsDto) {
-    return 'This action adds a new album';
+  constructor(private prisma: PrismaService) { }
+  async findAll(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.AlbumsWhereUniqueInput;
+    where?: Prisma.AlbumsWhereInput;
+    orderBy?: Prisma.AlbumsOrderByWithRelationInput;
+  }): Promise<Albums[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+
+    return await this.prisma.albums.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+      include: {
+        _count: {
+          select: { tracks: true },
+        },
+      }
+    });
+  }
+  async findOne(where: Prisma.AlbumsWhereUniqueInput): Promise<Albums> {
+    return await this.prisma.albums.findUnique({
+      where: where
+    });
   }
 
-  findAll() {
-    return `This action returns all albums`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} album`;
-  }
-
-  update(id: number, updateAlbumsDto: UpdateAlbumsDto) {
-    return `This action updates a #${id} album`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} album`;
-  }
 }

@@ -1,44 +1,37 @@
 import {
   Controller,
   Get,
-  Post,
-  Body,
-  Patch,
   Param,
-  Delete,
+  Query,
 } from '@nestjs/common';
 import { AlbumsService } from './albums.service';
-import { CreateAlbumsDto } from './dto/create-albums.dto';
-import { UpdateAlbumsDto } from './dto/update-albums.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Albums')
 @Controller('albums')
 export class AlbumsController {
-  constructor(private readonly albumsService: AlbumsService) {}
+  constructor(private readonly albumsService: AlbumsService) { }
 
-  @Post()
-  create(@Body() createAlbumsDto: CreateAlbumsDto) {
-    return this.albumsService.create(createAlbumsDto);
-  }
-
+  @ApiQuery({ name: 'cursor', required: false })
+  @ApiQuery({ name: 'search', required: false })
   @Get()
-  findAll() {
-    return this.albumsService.findAll();
+  findAll(
+    @Query('cursor') cursor?: string,
+    @Query('search') search?: string,
+  ) {
+    return this.albumsService.findAll({
+      cursor: cursor ? { id: cursor } : undefined,
+      where: {
+        name: {
+          contains: search,
+          mode: 'insensitive'
+        }
+      },
+    });
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.albumsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAlbumsDto: UpdateAlbumsDto) {
-    return this.albumsService.update(+id, updateAlbumsDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.albumsService.remove(+id);
+    return this.albumsService.findOne({ id: id });
   }
 }

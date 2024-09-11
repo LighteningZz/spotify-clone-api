@@ -6,39 +6,62 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { CreateTracksDto } from './dto/create-tracks.dto';
 import { UpdateTracksDto } from './dto/update-tracks.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Prisma, Tracks } from '@prisma/client';
+import { TracksOrderbyInputDto } from './dto/tracks-orderby-input.dto';
+import { TracksWithCount } from './entities/tracks-with-count.entity';
 
 @ApiTags('Tracks')
 @Controller('tracks')
 export class TracksController {
-  constructor(private readonly tracksService: TracksService) {}
+  constructor(private readonly tracksService: TracksService) { }
 
-  @Post()
-  create(@Body() createTracksDto: CreateTracksDto) {
-    return this.tracksService.create(createTracksDto);
-  }
-
+  @ApiQuery({ name: 'cursor', required: false })
+  @ApiQuery({ name: 'search', required: false })
   @Get()
-  findAll() {
-    return this.tracksService.findAll();
+  findAll(
+    @Query('cursor') cursor?: string,
+    @Query('search') search?: string,
+  ) {
+    return this.tracksService.findAll({
+      cursor: cursor ? { id: cursor } : undefined,
+      where: {
+        OR: [
+          {
+            title: {
+              contains: search,
+              mode: 'insensitive',
+            }
+          },
+          {
+            album: {
+              name: {
+                contains: search,
+                mode: 'insensitive'
+              }
+            },
+          },
+          {
+            artist: {
+              name: {
+                contains: search,
+                mode: 'insensitive'
+              }
+            }
+          }
+        ]
+      },
+    });
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.tracksService.findOne(+id);
+    return this.tracksService.findOne({ id: id });
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTracksDto: UpdateTracksDto) {
-    return this.tracksService.update(+id, updateTracksDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tracksService.remove(+id);
-  }
 }
