@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class AlbumsDto {
+export class PlayListsDto {
   @ApiProperty({
     type: 'string',
   })
@@ -8,9 +8,9 @@ export class AlbumsDto {
   @ApiProperty({
     type: 'string',
   })
-  image: string;
+  title: string;
   @ApiProperty({
-    type: 'string',
+    type: 'boolean',
   })
-  name: string;
+  public: boolean;
 }

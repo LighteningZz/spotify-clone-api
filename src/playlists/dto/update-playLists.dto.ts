@@ -1,19 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
-export class UpdateAlbumsDto {
+export class UpdatePlayListsDto {
   @ApiProperty({
     type: 'string',
     required: false,
   })
   @IsOptional()
   @IsString()
-  image?: string;
-  @ApiProperty({
-    type: 'string',
-    required: false,
-  })
-  @IsOptional()
-  @IsString()
-  name?: string;
+  title?: string;
 }

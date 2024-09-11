@@ -1,18 +1,16 @@
-
-import {ApiProperty} from '@nestjs/swagger'
-
+import { ApiProperty } from '@nestjs/swagger';
 
 export class ArtistsDto {
   @ApiProperty({
-  type: 'string',
-})
-id: string ;
-@ApiProperty({
-  type: 'string',
-})
-name: string ;
-@ApiProperty({
-  type: 'string',
-})
-image: string ;
+    type: 'string',
+  })
+  id: string;
+  @ApiProperty({
+    type: 'string',
+  })
+  name: string;
+  @ApiProperty({
+    type: 'string',
+  })
+  image: string;
 }
