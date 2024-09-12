@@ -30,8 +30,8 @@ export class AlbumsService {
       }
     });
   }
-  async findOne(where: Prisma.AlbumsWhereUniqueInput): Promise<Albums> {
-    return await this.prisma.albums.findUnique({
+  async findOne(where: Prisma.AlbumsWhereInput): Promise<Albums> {
+    return await this.prisma.albums.findFirst({
       where: where
     });
   }

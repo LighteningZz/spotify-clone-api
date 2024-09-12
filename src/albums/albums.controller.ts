@@ -27,11 +27,16 @@ export class AlbumsController {
           mode: 'insensitive'
         }
       },
+      orderBy: {
+        tracks: {
+          _count: 'desc'
+        }
+      }
     });
   }
-
+  @ApiQuery({ name: 'id', description: 'artist Id' })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.albumsService.findOne({ id: id });
+    return this.albumsService.findOne({ artistsId: id });
   }
 }

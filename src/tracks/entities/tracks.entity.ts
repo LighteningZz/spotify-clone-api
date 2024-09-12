@@ -1,11 +1,11 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, Tracks as TracksPrisma } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 import { Albums } from '../../albums/entities/albums.entity';
 import { Artists } from '../../artists/entities/artists.entity';
 import { PlayListItems } from '../../playListItems/entities/playListItems.entity';
 import { Favorite } from '../../favorite/entities/favorite.entity';
 
-export class Tracks {
+export class Tracks implements TracksPrisma {
   @ApiProperty({
     type: 'string',
   })
@@ -28,7 +28,7 @@ export class Tracks {
     format: 'double',
     nullable: true,
   })
-  duration: Prisma.Decimal | null;
+  duration: number | null;
   @ApiProperty({
     type: 'string',
     nullable: true,

@@ -6,15 +6,18 @@ import {
   Patch,
   Param,
   Delete,
-  Query,
+  Query
 } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { CreateTracksDto } from './dto/create-tracks.dto';
 import { UpdateTracksDto } from './dto/update-tracks.dto';
 import { ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Prisma, Tracks } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { TracksOrderbyInputDto } from './dto/tracks-orderby-input.dto';
 import { TracksWithCount } from './entities/tracks-with-count.entity';
+import { Tracks } from './entities/tracks.entity';
+import { plainToInstance } from 'class-transformer';
+
 
 @ApiTags('Tracks')
 @Controller('tracks')
@@ -24,11 +27,11 @@ export class TracksController {
   @ApiQuery({ name: 'cursor', required: false })
   @ApiQuery({ name: 'search', required: false })
   @Get()
-  findAll(
+  async findAll(
     @Query('cursor') cursor?: string,
     @Query('search') search?: string,
-  ) {
-    return this.tracksService.findAll({
+  ): Promise<Tracks[]> {
+    const data = await this.tracksService.findAll({
       cursor: cursor ? { id: cursor } : undefined,
       where: {
         OR: [
@@ -57,6 +60,45 @@ export class TracksController {
         ]
       },
     });
+
+    return data;
+  }
+
+  @ApiQuery({ name: 'id', description: 'album Id' })
+  @Get('album/:id')
+  async findByAlbum(@Query('id') id: string): Promise<Tracks[]> {
+    const data = await this.tracksService.findAll({
+      where: {
+        albumId: id
+      },
+      orderBy: {
+        album: {
+          tracks: {
+            _count: 'desc'
+          }
+        }
+      }
+    });
+
+    return data;
+  }
+  @ApiQuery({ name: 'id', description: 'artist Id' })
+  @Get('artist/:id')
+  async findByArtist(@Query('id') id: string): Promise<Tracks[]> {
+    const data = await this.tracksService.findAll({
+      where: {
+        artistsId: id
+      },
+      orderBy: {
+        album: {
+          tracks: {
+            _count: 'desc'
+          }
+        }
+      }
+    });
+
+    return data;
   }
 
   @Get(':id')

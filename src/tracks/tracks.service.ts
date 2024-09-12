@@ -5,8 +5,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { TracksDto } from './dto/tracks.dto';
 import { plainToInstance, classToPlain } from 'class-transformer';
 import { Prisma, Tracks } from '@prisma/client';
-import { TracksWithCount } from './entities/tracks-with-count.entity';
-
 @Injectable()
 export class TracksService {
   constructor(private prisma: PrismaService) { }
@@ -33,8 +31,9 @@ export class TracksService {
         _count: {
           select: { playListItems: true },
         },
+        artist: true,
         Favorite: true
-      }
+      },
     });
   }
 
