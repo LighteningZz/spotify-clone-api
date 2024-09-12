@@ -71,7 +71,7 @@ model Tracks {
   album         Albums          @relation(fields: [albumId], references: [id])
   title         String
   image         String
-  duration      Decimal?
+  duration      Float?
   durationText  String?
   url           String?
   albumId       String          @db.Uuid
