@@ -1,5 +1,8 @@
 
-# This Project is in progress
+# This Project is in progress (nearly completed.)
+
+If u looking for frontend
+[spotify-clone-frontend](https://github.com/LighteningZz/spotify-clone-frontend)
 
 ## Prerequisites
 
